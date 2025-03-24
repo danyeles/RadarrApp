@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        USERNAME = sh(script: 'echo $USER', returnStdout: true).trim()
         DOCKER_IMAGE = 'linuxserver/radarr:latest'
         CONTAINER_NAME = 'radarr'
         PUID = '1000'
@@ -9,11 +10,6 @@ pipeline {
         TZ = 'America/Monterrey'
         WEBUI_PORTS = '7878/tcp,7878/udp'
         CONFIG_PATH = '/home/docker/radarr/config'
-        MEDIA_PATH = '/mnt/Media'
-        MOVIES_PATH = '/mnt/Media/Movies'
-        MYMOVIES_PATH = '/mnt/Media/MyMovies'
-        DOWNLOADS_PATH = '/mnt/Media/Downloads'
-        MVSDOWNLOADS_PATH = '/mnt/Media/Movies/MoviesDownloads'
     }
 
     stages {
@@ -29,11 +25,10 @@ pipeline {
                         -e PGID=${PGID} \
                         -e TZ=${TZ} \
                         -v ${CONFIG_PATH}:/config \
-                        -v ${MEDIA_PATH}:/Media \
-                        -v ${DOWNLOADS_PATH}:/downloads \
-                        -v ${MOVIES_PATH}:/Movies \
-                        -v ${MYMOVIES_PATH}:/MyMovies \
-                        -v ${MVSDOWNLOADS_PATH}:/MoviesDownloads \
+                        -v /media/${USERNAME}/Media:/Media \
+                        -v /media/${USERNAME}/Media/Downloads:/downloads \
+                        -v /media/${USERNAME}/Media/Movies:/Movies \
+                        -v /media/${USERNAME}/Media/MyMovies:/MyMovies \
                         ${DOCKER_IMAGE}
                     """
                 }
