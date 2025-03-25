@@ -19,7 +19,7 @@ pipeline {
                     docker run -d \
                         --restart always \
                         --name ${CONTAINER_NAME} \
-                        -p 8989:8989 \
+                        -p 7878:7878 \
                         -e PUID=${PUID} \
                         -e PGID=${PGID} \
                         -e TZ=${TZ} \
